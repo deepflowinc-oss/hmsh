@@ -1,0 +1,19 @@
+resolver: lts-19.19
+
+packages:
+- .
+
+extra-deps: []
+
+extra-include-dirs:
+- /usr/local/include
+extra-lib-dirs:
+- /usr/local/lib
+
+ghc-options:
+  $everything: -haddock
+  $locals: -haddock
+
+flags:
+  hmsh:
+    build-executables: true

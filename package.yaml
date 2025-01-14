@@ -1,0 +1,70 @@
+name:                hmsh
+version:             0.1.0.0
+github:              "deepflowinc-oss/hmsh"
+license:             BSD3
+author:              "DeepFlow, Inc."
+maintainer:          "DeepFlow, Inc."
+copyright:           "2021 DeepFlow, Inc."
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/hmsh#readme>
+
+ghc-options:
+- -Wall
+
+dependencies:
+- base >= 4.7 && < 5
+- inline-c
+- vector
+- bytestring
+- containers
+- text
+- barbies
+- dlist
+- microlens
+- microlens-contra
+- vector-builder
+
+library:
+  source-dirs: src
+  extra-libraries:
+  - gmsh
+  other-modules:
+  - Numeric.Mesh.Gmsh.LowLevel.Utils
+  dependencies:
+  - transformers
+  - hashable
+  - mtl
+  - deepseq
+  - unliftio
+  - foldl
+  - vector-th-unbox
+  - semigroups
+  - regex-applicative
+
+flags:
+  build-executables:
+    manual: true
+    default: false
+    description: Whether to build example executables or not.
+
+tests:
+  hmsh-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hmsh

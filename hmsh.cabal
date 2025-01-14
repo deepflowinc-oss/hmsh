@@ -1,0 +1,99 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.37.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           hmsh
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/hmsh#readme>
+homepage:       https://github.com/deepflowinc-oss/hmsh#readme
+bug-reports:    https://github.com/deepflowinc-oss/hmsh/issues
+author:         DeepFlow, Inc.
+maintainer:     DeepFlow, Inc.
+copyright:      2021 DeepFlow, Inc.
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/deepflowinc-oss/hmsh
+
+flag build-executables
+  description: Whether to build example executables or not.
+  manual: True
+  default: False
+
+library
+  exposed-modules:
+      Numeric.Mesh.Gmsh
+      Numeric.Mesh.Gmsh.Fltk
+      Numeric.Mesh.Gmsh.Helper
+      Numeric.Mesh.Gmsh.Helper.Parser
+      Numeric.Mesh.Gmsh.LowLevel
+      Numeric.Mesh.Gmsh.LowLevel.Types
+      Numeric.Mesh.Gmsh.Model
+      Numeric.Mesh.Gmsh.Model.Geo
+      Numeric.Mesh.Gmsh.Model.Geo.Mesh
+      Numeric.Mesh.Gmsh.Model.Mesh
+      Numeric.Mesh.Gmsh.Model.Mesh.Field
+      Numeric.Mesh.Gmsh.Model.OpenCASCADE
+      Numeric.Mesh.Gmsh.Option
+      Numeric.Mesh.Gmsh.Types
+      Numeric.Mesh.Gmsh.Utils
+  other-modules:
+      Numeric.Mesh.Gmsh.LowLevel.Utils
+  hs-source-dirs:
+      src
+  ghc-options: -Wall
+  extra-libraries:
+      gmsh
+  build-depends:
+      barbies
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , deepseq
+    , dlist
+    , foldl
+    , hashable
+    , inline-c
+    , microlens
+    , microlens-contra
+    , mtl
+    , regex-applicative
+    , semigroups
+    , text
+    , transformers
+    , unliftio
+    , vector
+    , vector-builder
+    , vector-th-unbox
+  default-language: Haskell2010
+
+test-suite hmsh-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_hmsh
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      barbies
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , dlist
+    , hmsh
+    , inline-c
+    , microlens
+    , microlens-contra
+    , text
+    , vector
+    , vector-builder
+  default-language: Haskell2010

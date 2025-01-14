@@ -1,0 +1,60 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches: ["master"]
+
+jobs:
+  build:
+    name: "Build (GHC ${{matrix.ghc}})"
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ghc:
+        - 8.10.7
+        - 9.0.2
+    env:
+      STACK_YAML: stack-${{ matrix.ghc }}.yaml
+    steps:
+    - name: "Install Gmsh"
+      run: >
+        wget -qO- https://gmsh.info/bin/Linux/gmsh-4.8.4-Linux64-sdk.tgz
+        | sudo tar xvz --strip-components=1 -C /usr/
+    - name: "Install dependent apt packages"
+      shell: bash
+      run : |
+        sudo apt-get update
+        sudo apt-get install -y \
+          --no-install-recommends \
+          --no-install-suggests \
+          libgl1=1.0.0-2ubuntu2.3 \
+          libglu1-mesa-dev=9.0.0-2.1build1 \
+          libxrender-dev=1:0.9.10-1 \
+          libxinerama-dev=2:1.1.3-1 \
+          libxcursor-dev=1:1.1.15-1 \
+          libxft-dev=2.3.2-1
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: "Cache ~/.stack"
+      uses: actions/cache@v3
+      with:
+        path: ~/.stack
+        key: |
+          build-${{matrix.ghc}}-stack-root-${{hashFiles('${{env.STACK_YAML}}')}}-${{hashFiles('**/package.yaml')}}
+        restore-keys: |
+          build-${{matrix.ghc}}-stack-root-${{hashFiles('${{env.STACK_YAML}}')}}-
+          build-${{matrix.ghc}}-stack-root-
+    - name: "Cache .stack-work"
+      uses: actions/cache@v3
+      with:
+        path: .stack-work
+        key: |
+          build-${{matrix.ghc}}-stack-work-${{hashFiles('${{env.STACK_YAML}}')}}-${{hashFiles('**/package.yaml')}}-${{hashFiles('**/*.hs')}}
+        restore-keys: |
+          build-${{matrix.ghc}}-stack-work-${{hashFiles('${{env.STACK_YAML}}')}}-${{hashFiles('**/package.yaml')}}-
+          build-${{matrix.ghc}}-stack-work-${{hashFiles('${{env.STACK_YAML}}')}}-
+          build-${{matrix.ghc}}-stack-work-
+    - name: "Build"
+      run: stack build --test --no-run-tests --bench --no-run-benchmarks
